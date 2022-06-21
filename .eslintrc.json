@@ -1,0 +1,103 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "node": true,
+        "jest": true
+    },
+    "extends": [
+        // Extensions of React js
+        "react-app",
+        "react-app/jest",
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended",
+        // Add rules of airbnb
+        "airbnb",
+        // Add prettier to disable rules of airbnb . The rules of prettier is in the file  .prettierc 
+        "prettier",
+        "plugin:prettier/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "react-hooks",
+        "@typescript-eslint",
+        "prettier"
+    ],
+    "rules": {
+        "react/react-in-jsx-scope": "off",
+        // Issue: JSX not allowed in files with extension '.tsx' - Fix: Add Line: 34
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".tsx"
+                ]
+            }
+        ],
+        "camelcase": "error",
+        "spaced-comment": "error",
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "no-duplicate-imports": "error",
+        "no-plusplus": "off",
+        "max-len": [
+            "warn",
+            {
+                "code": 100
+            }
+        ],
+        // React Hooks rules
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        // Suggest all functions have explicit return type
+        "@typescript-eslint/explicit-function-return-type": [
+            "warn",
+            {
+                "allowExpressions": true
+            }
+        ],
+        // Issue: Missing file extension "tsx" for "./App" - Fix: Add lines between 40 and 49
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "js": "never",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ],
+        "prettier/prettier": [
+            "error",
+            {
+                "endOfLine": "auto"
+            }
+        ]
+    },
+    // Issue: Missing file extesion for "./App" - Fix: Add lines between 52 and 58
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".ts",
+                    ".tsx"
+                ]
+            }
+        }
+    }
+}
