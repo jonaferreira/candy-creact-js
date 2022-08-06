@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/candy-creact-js/static/css/main.c1071ce1.css",
+    "main.js": "/candy-creact-js/static/js/main.a6004f97.js",
+    "static/js/787.c971433a.chunk.js": "/candy-creact-js/static/js/787.c971433a.chunk.js",
+    "index.html": "/candy-creact-js/index.html",
+    "main.c1071ce1.css.map": "/candy-creact-js/static/css/main.c1071ce1.css.map",
+    "main.a6004f97.js.map": "/candy-creact-js/static/js/main.a6004f97.js.map",
+    "787.c971433a.chunk.js.map": "/candy-creact-js/static/js/787.c971433a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c1071ce1.css",
+    "static/js/main.a6004f97.js"
+  ]
+}
