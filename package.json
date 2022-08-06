@@ -1,5 +1,6 @@
 {
   "name": "candy-creact-js",
+  "homepage" : "https://jonaferreira.github.io/candy-creact-js/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -20,6 +21,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "predeploy":"npm run build",
+    "deploy":"gh-pages -d build",
     "lint-fix": "eslint src/ --fix",
     "format": "prettier --write src/ --config .prettierrc",
     "test": "react-scripts test",
@@ -48,6 +51,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.30.0",
+    "gh-pages": "^4.0.0",
     "prettier": "^2.6.2"
   }
 }
