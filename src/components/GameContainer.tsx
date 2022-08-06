@@ -1,14 +1,24 @@
 import React, { DragEvent, useEffect, useState, useCallback } from 'react'
 
-import blueCandy from '../images/blue-candy.png'
-import greenCandy from '../images/green-candy.png'
-import orangeCandy from '../images/orange-candy.png'
-import purpleCandy from '../images/purple-candy.png'
-import redCandy from '../images/red-candy.png'
-import yellowCandy from '../images/yellow-candy.png'
-import blank from '../images/blank.png'
+import { Candy } from './Game.styled'
+
+// import blueCandy from '../images/blue-candy.png'
+// import greenCandy from '../images/green-candy.png'
+// import orangeCandy from '../images/orange-candy.png'
+// import purpleCandy from '../images/purple-candy.png'
+// import redCandy from '../images/red-candy.png'
+// import yellowCandy from '../images/yellow-candy.png'
+// import blank from '../images/blank.png'
 
 const width = 8
+const blueCandy = '0, 0, 255'
+const greenCandy = '0, 128, 0'
+const orangeCandy = '255, 165, 0'
+const purpleCandy = '128, 0, 128'
+const redCandy = '128, 0, 128'
+const yellowCandy = '255, 255, 0'
+const blank = '0, 0, 0'
+
 const candyColors = [blueCandy, orangeCandy, purpleCandy, redCandy, yellowCandy, greenCandy]
 
 const generateRandomColorArrangement = (widthParam: number): string[] => {
@@ -26,8 +36,8 @@ interface ChildProps {
 
 function GameContainer({ setScoreDisplay }: ChildProps): React.ReactElement {
   const [currentColorArrangement, setCurrentColorArrangement] = useState<string[]>([])
-  const [squareBeingDragged, setSquareBeingDragged] = useState<EventTarget>()
-  const [squareBeingReplaced, setSquareBeingReplaced] = useState<EventTarget>()
+  const [squareBeingDragged, setSquareBeingDragged] = useState<number>(0)
+  const [squareBeingReplaced, setSquareBeingReplaced] = useState<number>(0)
 
   const checkForColumnOfFour = useCallback((): boolean => {
     for (let i = 0; i <= 39; i++) {
@@ -134,37 +144,29 @@ function GameContainer({ setScoreDisplay }: ChildProps): React.ReactElement {
     }
   }, [currentColorArrangement])
 
-  const dragStart = (e: DragEvent) => {
-    setSquareBeingDragged(e.target)
+  const handleDropBeing = (e: DragEvent, index: number): void => {
+    setSquareBeingDragged(index)
   }
 
-  const handleDrop = (e: DragEvent) => {
-    setSquareBeingReplaced(e.target)
+  const handleDropToRemplace = (e: DragEvent, index: number): void => {
+    setSquareBeingReplaced(index)
   }
 
-  const dragEnd = () => {
-    const squareBeingDraggedHtmlInputElement = squareBeingDragged as HTMLInputElement
-    const squareBeingReplacedHtmlInputElement = squareBeingReplaced as HTMLInputElement
+  const doDrag = (): void => {
+    const srcDragged: string = currentColorArrangement[squareBeingDragged]
+    const srcReplaced: string = currentColorArrangement[squareBeingReplaced]
 
-    const squareBeingDraggedId = Number(squareBeingDraggedHtmlInputElement.getAttribute('data-id'))
-    const squareBeingReplacedId = Number(
-      squareBeingReplacedHtmlInputElement.getAttribute('data-id'),
-    )
-
-    const srcDragged: string = squareBeingDraggedHtmlInputElement.getAttribute('src') as string
-    const srcReplaced: string = squareBeingReplacedHtmlInputElement.getAttribute('src') as string
-
-    currentColorArrangement[squareBeingReplacedId] = srcDragged
-    currentColorArrangement[squareBeingDraggedId] = srcReplaced
+    currentColorArrangement[squareBeingReplaced] = srcDragged
+    currentColorArrangement[squareBeingDragged] = srcReplaced
 
     const validMoves = [
-      squareBeingDraggedId - 1,
-      squareBeingDraggedId - width,
-      squareBeingDraggedId + 1,
-      squareBeingDraggedId + width,
+      squareBeingDragged - 1,
+      squareBeingDragged - width,
+      squareBeingDragged + 1,
+      squareBeingDragged + width,
     ]
 
-    const validMove = validMoves.includes(squareBeingReplacedId)
+    const validMove = validMoves.includes(squareBeingReplaced)
 
     const isAColumnOfFour = checkForColumnOfFour()
     const isARowOfFour = checkForRowOfFour()
@@ -172,16 +174,15 @@ function GameContainer({ setScoreDisplay }: ChildProps): React.ReactElement {
     const isARowOfThree = checkForRowOfThree()
 
     if (
-      squareBeingReplacedId &&
+      squareBeingReplaced &&
       validMove &&
       (isARowOfThree || isARowOfFour || isAColumnOfFour || isAColumnOfThree)
     ) {
-      const cleanEvent: EventTarget = null as any
-      setSquareBeingDragged(cleanEvent)
-      setSquareBeingReplaced(cleanEvent)
+      setSquareBeingDragged(0)
+      setSquareBeingReplaced(0)
     } else {
-      currentColorArrangement[squareBeingReplacedId] = srcReplaced
-      currentColorArrangement[squareBeingDraggedId] = srcDragged
+      currentColorArrangement[squareBeingReplaced] = srcReplaced
+      currentColorArrangement[squareBeingDragged] = srcDragged
       setCurrentColorArrangement([...currentColorArrangement])
     }
   }
@@ -217,22 +218,22 @@ function GameContainer({ setScoreDisplay }: ChildProps): React.ReactElement {
   return (
     <div className='game'>
       {currentColorArrangement.map((candyColor, index) => (
-        // eslint-disable-next-line jsx-a11y/alt-text
-        <img
+        <div
           className='candy'
+          id={candyColor}
           // eslint-disable-next-line react/no-array-index-key
           key={index}
-          src={candyColor}
-          alt={candyColor}
           data-id={index}
           draggable
           onDragOver={(e) => e.preventDefault()}
           onDragEnter={(e) => e.preventDefault()}
           onDragLeave={(e) => e.preventDefault()}
-          onDrop={(e) => handleDrop(e)}
-          onDragEnd={() => dragEnd()}
-          onDragStart={(e) => dragStart(e)}
-        />
+          onDrop={(e) => handleDropToRemplace(e, index)}
+          onDragEnd={() => doDrag()}
+          onDragStart={(e) => handleDropBeing(e, index)}
+        >
+          <Candy color={candyColor} hasBorder />
+        </div>
       ))}
     </div>
   )

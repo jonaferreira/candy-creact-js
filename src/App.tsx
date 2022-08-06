@@ -7,8 +7,8 @@ function App(): React.ReactElement {
   const [scoreDisplay, setScoreDisplay] = useState(0)
   return (
     <div className='App'>
+      <h1>Scoring: {scoreDisplay}</h1>
       <GameContainer setScoreDisplay={setScoreDisplay} />
-      <h1>{scoreDisplay}</h1>
     </div>
   )
 }
